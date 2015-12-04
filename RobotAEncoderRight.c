@@ -9,7 +9,7 @@ task main()
 	// Variables
 	long encnow = 0;
 	long encprevious = 0;
-	float rpmconversion = 21*((60.0)/392.0);
+	float rpmconversion = 15*((60.0)/392.0);
 
 	// Reset the encoder value to zero
 	resetMotorEncoder(InsideMotor);
@@ -20,25 +20,7 @@ task main()
 
 	while(true)
 	{
-		// Iterate through the different power levels 0 to -128
-		for(int i = -1; i >= -128; i--)
-    {
-    	// Set the motor powers
-			motor[InsideMotor] = i;
-			motor[OutsideMotor] = i;
-
-			// Wait one second and then get the encoder value
-			wait(1, seconds);
-			encnow = SensorValue[I2C_1];
-
-			// Read the encoder value and output the sensor value and rpm calculation
-			writeDebugStreamLine("%d\t%d\t%f", i, abs(encnow), (rpmconversion*abs(encnow)));
-
-			// Reset the ticks of the sensor
-			SensorValue[I2C_1] = 0;
-		}
-
-		// Iterate through the different power levels, 0 to 127
+		// Iterate through the different power levels, 1-127
 		for(int i = 0; i <= 127; i++)
     {
     	// Set the motor powers
@@ -50,7 +32,7 @@ task main()
 			encnow = SensorValue[I2C_1];
 
 			// Read the encoder value and output the sensor value and rpm calculation
-			writeDebugStreamLine("%d\t%d\t%f", i, abs(encnow), (rpmconversion*abs(encnow)));
+			writeDebugStreamLine("%d\t%d\t%f", i, encnow, (rpmconversion*encnow));
 
 			// Reset the ticks of the sensor
 			SensorValue[I2C_1] = 0;
