@@ -32,7 +32,7 @@ task main()
 			encnow = SensorValue[I2C_1];
 
 			// Read the encoder value and output the sensor value and rpm calculation
-			writeDebugStreamLine("%d\t%d\t%f", i, abs(encnow), (rpmconversion*abs(encnow)));
+			writeDebugStreamLine("%d\t%d\t%f", i, encnow, (rpmconversion*encnow));
 
 			// Reset the ticks of the sensor
 			SensorValue[I2C_1] = 0;
@@ -50,7 +50,7 @@ task main()
 			encnow = SensorValue[I2C_1];
 
 			// Read the encoder value and output the sensor value and rpm calculation
-			writeDebugStreamLine("%d\t%d\t%f", i, abs(encnow), (rpmconversion*abs(encnow)));
+			writeDebugStreamLine("%d\t%d\t%f", i, encnow, (rpmconversion*encnow));
 
 			// Reset the ticks of the sensor
 			SensorValue[I2C_1] = 0;
