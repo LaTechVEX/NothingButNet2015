@@ -8,7 +8,6 @@ task main()
 {
 	// Variables
 	long encnow = 0;
-	long encprevious = 0;
 	float rpmconversion = 21*((60.0)/392.0);
 
 	// Reset the encoder value to zero
@@ -22,8 +21,8 @@ task main()
 	{
 		// Iterate through the different power levels 0 to -128
 		for(int i = -1; i >= -128; i--)
-    {
-    	// Set the motor powers
+		{
+			// Set the motor powers
 			motor[InsideMotor] = i;
 			motor[OutsideMotor] = i;
 
@@ -36,12 +35,21 @@ task main()
 
 			// Reset the ticks of the sensor
 			SensorValue[I2C_1] = 0;
+			
+			if(i == -128)
+			{
+				for(int x = -128; x > 0; x = x + 20)
+				{
+					motor[InsideMotor] = x;
+					motor[OutsideMotor] = x;
+				}
+			}
 		}
 
 		// Iterate through the different power levels, 0 to 127
 		for(int i = 0; i <= 127; i++)
-    {
-    	// Set the motor powers
+		{
+			// Set the motor powers
 			motor[InsideMotor] = i;
 			motor[OutsideMotor] = i;
 
