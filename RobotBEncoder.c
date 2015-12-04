@@ -9,7 +9,7 @@ task main()
 	// Variables
 	long encnow = 0;
 	long encprevious = 0;
-	float rpmconversion = ((60.0)/392.0);
+	float rpmconversion = 21*((60.0)/392.0);
 
 	// Reset the encoder value to zero
 	resetMotorEncoder(InsideMotor);
@@ -32,7 +32,7 @@ task main()
 			encnow = SensorValue[I2C_1];
 
 			// Read the encoder value and output the sensor value and rpm calculation
-			writeDebugStreamLine("Sensor: %d \tRPM: %f", encnow, (rpmconversion*encnow));
+			writeDebugStreamLine("%d\t%d\t%f", i, encnow, (rpmconversion*encnow));
 
 			// Reset the ticks of the sensor
 			SensorValue[I2C_1] = 0;
