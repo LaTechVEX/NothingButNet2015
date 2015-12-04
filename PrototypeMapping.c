@@ -12,7 +12,7 @@ task main()
 //ch3 is left joystick horizontal
 //ch4 is left joystick vertical
 	while(true){
-		int vert=vexRt[Ch4];
+		int vert=vexRT[Ch4];
 		int horz=vexRT[Ch3];
 		int lMotorPower=vert;
 		int rMotorPower=vert;
@@ -68,7 +68,7 @@ task main()
 
 		//Slow motors by 1/4 if btn5D is pressed
 		if(vexRT[Btn5D]){
-		motorNerf=4
+		motorNerf=4;
 		}else{
 		motorNerf=1;
 		}
