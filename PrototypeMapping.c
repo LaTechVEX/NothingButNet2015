@@ -35,8 +35,8 @@ task main()
 				}
 			//If we are pulling back
 			}else{
-				if(rMotorPower+abs(horz)<-127){
-				lMotorPower=-127+horz-rMotorPower;
+				if(rMotorPower-horz<-127){
+				lMotorPower=-127-horz+rMotorPower;
 				rMotorPower=-127;
 				}else{
 				rMotorPower-=abs(horz);
@@ -56,7 +56,7 @@ task main()
 				}
 			//If we are pulling back
 			}else{
-				if(lMotorPower+abs(horz)<-127){
+				if(lMotorPower-horz<-127){
 				rMotorPower=-127+horz-lMotorPower;
 				lMotorPower=-127;
 				}else{
