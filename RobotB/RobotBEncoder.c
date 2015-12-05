@@ -35,16 +35,18 @@ task main()
 
 			// Reset the ticks of the sensor
 			SensorValue[I2C_1] = 0;
-			
+
 			if(i == -128)
 			{
 				for(int x = -128; x < 0; x = x + 20)
 				{
 					motor[InsideMotor] = x;
 					motor[OutsideMotor] = x;
+					wait(500,milliseconds);
 				}
 				motor[InsideMotor] = 0;
 				motor[OutsideMotor] = 0;
+				wait(1,seconds);
 				SensorValue[I2C_1] = 0;
 			}
 		}
@@ -65,16 +67,18 @@ task main()
 
 			// Reset the ticks of the sensor
 			SensorValue[I2C_1] = 0;
-			
+
 			if(i == 127)
 			{
 				for(int x = 0; x > 0; x = x - 20)
 				{
 					motor[InsideMotor] = x;
 					motor[OutsideMotor] = x;
+					wait(500,milliseconds);
 				}
 				motor[InsideMotor] = 0;
 				motor[OutsideMotor] = 0;
+				wait(1,seconds);
 				SensorValue[I2C_1] = 0;
 			}
 		}
