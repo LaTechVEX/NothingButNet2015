@@ -35,7 +35,7 @@ task main ()
 		motor[Inside2] = vexRT[Ch2];
 		motor[Outside1] = vexRT[Ch2];
 		motor[Outside2] = vexRT[Ch2];
-		motor[Feeder] = vexRT[Ch3]/2;
+		motor[Feeder] = vexRT[Ch3];
   }
 }
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
