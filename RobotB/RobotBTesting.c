@@ -36,10 +36,13 @@ task main()
 	  motor[LFlywheel2] = motor[LFlywheel1];
 		motor[RFlywheel] = motor[LFlywheel2];
 
+		int verticalL = pow(vexRT(Ch3)/127,2)*127;
+		int verticalR = pow(vexRT(Ch2)/127,2)*127;
+
 		// Move Robot
-	  motor[LRWheel] = vexRT(Ch3);
+	  motor[LRWheel] = verticalL;
 	  motor[LFWheel] = motor[LRWheel];
-    motor[RRWheel] = vexRT(Ch2);
+    motor[RRWheel] = verticalR;
     motor[RFWheel] = motor[RRWheel];
 
 	   if(vexRT(Btn6U))
