@@ -61,9 +61,10 @@ task main()
 		motor[Outside2] = motor[Inside1];
 
 		//Fit the input to an exponential curve
-
-		int verticalL = pow(vexRT(Ch3)/127.0,1.8)*127.0;
-		int verticalR = pow(vexRT(Ch2)/127.0,1.8)*127.0;
+		//Squares are always positive, so a ternary operator is needed for negative numbers
+		//The abs is just in case we decide to go with odd exponents
+		int verticalL = abs(pow(vexRT(Ch3)/127.0,2.0))*127.0 *((vexRT(Ch3)>0)?(-1):(1));
+		int verticalR = abs(pow(vexRT(Ch2)/127.0,2.0))*127.0 *((vexRT(Ch2)>0)?(-1):(1));
 
 		// Move Robot
 	  motor[LRWheel] = verticalL;
