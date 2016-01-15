@@ -61,8 +61,9 @@ task main()
 		motor[Outside2] = motor[Inside1];
 
 		//Fit the input to an exponential curve
-		int verticalL = pow(vexRT(Ch3)/127,2)*127;
-		int verticalR = pow(vexRT(Ch2)/127,2)*127;
+
+		int verticalL = pow(vexRT(Ch3)/127.0,1.8)*127.0;
+		int verticalR = pow(vexRT(Ch2)/127.0,1.8)*127.0;
 
 		// Move Robot
 	  motor[LRWheel] = verticalL;
