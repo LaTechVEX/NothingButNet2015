@@ -50,7 +50,7 @@ task main()
 
 	   if(vexRT(Btn6U))
 	     motor[Intake] = 127;
-	 	 else if (vexRT(Btn5U))
+	 	 else
 	 	   motor[Intake] = 0;
 
 	}
