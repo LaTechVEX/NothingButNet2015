@@ -6,8 +6,8 @@ Controls
 		8L: flywheel full speed
 		Ch3: left motors
 		Ch2: right motors
-		6U: feeder on
-		5U: feeder off
+		6U (hold): feeder on
+		5U (hold): feeder reverse
 	Robot B:
 		8U: stop flywheel
 		8R: flywheel speed 1
@@ -16,10 +16,13 @@ Controls
 		Ch3: left motors
 		Ch2: right motors
 		6U (hold): feeder on
+		5U (hold): feeder reverse
+		
 
 
 Ports
 	Robot A:
+		port 1: Feeder
 		port 2: Inside 1
 		port 3: Inside 2 (reversed)
 		port 4: Outside 1 (reversed)
@@ -28,13 +31,13 @@ Ports
 		port 7: LFWheel (reversed)
 		port 8: RRWheel
 		port 9: RFWheel
-		Feeder !NOT WIRED YET!
-	Robot B:	
-		port 2: LRWheel
-		port 3: LFWheel
-		port 4: RRWheel (reversed)
-		port 5: RFWheel (reversed)
-		port 6: Intake (reversed
-		port 7: LFlywheel 1 (reversed)
-		port 8: LFlywheel 2 (reversed)
-		port 9: RFlywheel (reversed)
+	Robot B:
+		port 1: LFW
+		port 2: RFW (reversed)
+		port 3: RRW (reversed)
+		port 4: LRW
+		port 5: REF (right encoder flywheel) 
+		port 6: RF (reversed)
+		port 7: LF
+		port 8: I1 (reversed)
+		port 9: I2 (reversed)

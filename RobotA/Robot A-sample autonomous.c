@@ -1,7 +1,7 @@
 #pragma config(I2C_Usage, I2C1, i2cSensors)
-#pragma config(Sensor, dgtl1,  Feeder,         sensorDigitalOut)
-#pragma config(Sensor, I2C_1,  ,               sensorQuadEncoderOnI2CPort,    , AutoAssign )
-#pragma config(Sensor, I2C_2,  ,               sensorQuadEncoderOnI2CPort,    , AutoAssign )
+#pragma config(Sensor, I2C_1,  ,               sensorQuadEncoderOnI2CPort,    , AutoAssign)
+#pragma config(Sensor, I2C_2,  ,               sensorQuadEncoderOnI2CPort,    , AutoAssign)
+#pragma config(Motor,  port1,           Feeder,        tmotorVex393_HBridge, openLoop)
 #pragma config(Motor,  port2,           Inside1,       tmotorVex393HighSpeed_MC29, openLoop, encoderPort, I2C_1)
 #pragma config(Motor,  port3,           Inside2,       tmotorVex393HighSpeed_MC29, openLoop, reversed, encoderPort, I2C_2)
 #pragma config(Motor,  port4,           Outside1,      tmotorVex393HighSpeed_MC29, openLoop, reversed)
@@ -64,7 +64,13 @@ void rightTurn (int time)
 	motor[LRWheel] = -127;
 	motor[RFWheel] = 127;
 	motor[RRWheel] = 127;
-	wait1Msec(time);
+	nMotorEncoder[LFWheel] = 0;
+	while(abs(nMotorEncoder[LFWheel])/627.2<(3.125*(angle/360.0))){
+	wait1Msec(10);
+		if(vexRT(Btn8U)){
+			break;
+		}
+	}
 }
 
 
