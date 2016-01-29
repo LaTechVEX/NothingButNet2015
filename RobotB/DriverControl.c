@@ -16,7 +16,7 @@ task main()
 {
 
 	// Set the motors initially
-	int Presets[4] = {0, 55, 85, 127};
+	int Presets[4] = {0, 55, 75, 127};
 	int currentPreset = 0;
 	motor[REF] = Presets[currentPreset];
 	motor[RF] = motor[REF];
@@ -42,8 +42,8 @@ task main()
 		// Squares are always positive, so a ternary operator is needed for negative numbers
 		// The abs is just in case we decide to go with odd exponents or even roots (like 3/2)
 		// We devide by 128 because the program can theoretically reach -128
-		int verticalL = pow(abs(vexRT(Ch3))/128.0,2.0)*127.0 *((vexRT(Ch3)>0)?(1):(-1));
-		int verticalR = pow(abs(vexRT(Ch2))/128.0,2.0)*127.0 *((vexRT(Ch2)>0)?(1):(-1));
+		int verticalL = pow(abs(vexRT(Ch3))/128.0,2.7)*127.0 *((vexRT(Ch3)>0)?(1):(-1));
+		int verticalR = pow(abs(vexRT(Ch2))/128.0,2.7)*127.0 *((vexRT(Ch2)>0)?(1):(-1));
 
 		// Move Robot
 	  motor[LRW] = verticalL;
