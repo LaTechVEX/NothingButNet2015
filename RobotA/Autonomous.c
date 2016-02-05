@@ -35,43 +35,15 @@
 
 int Presets[4] = {0,55, 85,127};
 
-void move(int speed)//this can be used forward or backward movement
-{
-	motor[LFWheel] = speed;
-	motor[LRWheel] = speed;
-	motor[RFWheel] = speed;
-	motor[RRWheel] = speed;
-}
+//These variables track the robots position and orientation
+//Useful for any future decisions to veer off track or calculate routes
+double locX;
+double locY;
+double rotation;
 
-void leftTurn (int angle)
-{
-	motor[LFWheel] = 127;
-	motor[LRWheel] = 127;
-	motor[RFWheel] = -127;
-	motor[RRWheel] = -127;
-	nMotorEncoder[LFWheel] = 0;
-	while(nMotorEncoder[LFWheel]/627.2<(3.125*(angle/360.0))){
-	wait1Msec(10);
-		if(vexRT(Btn8U)){
-			break;
-		}
-	}
-}
+//Distance is in inches
+//Wheels are 4 inches, so one complete rotation moves the bot 4 inches
 
-void rightTurn (int time)
-{
-	motor[LFWheel] = -127;
-	motor[LRWheel] = -127;
-	motor[RFWheel] = 127;
-	motor[RRWheel] = 127;
-	nMotorEncoder[LFWheel] = 0;
-	while(abs(nMotorEncoder[LFWheel])/627.2<(3.125*(angle/360.0))){
-	wait1Msec(10);
-		if(vexRT(Btn8U)){
-			break;
-		}
-	}
-}
 
 
 
@@ -82,6 +54,63 @@ void freeze()//for the wheels
 	motor[RFWheel] = 0;
 	motor[RRWheel] = 0;
 }
+
+
+
+void move(int distance)
+{
+	motor[LFWheel] = 127;
+	motor[LRWheel] = 127;
+	motor[RFWheel] = 127;
+	motor[RRWheel] = 127;
+
+	nMotorEncoder[LFWheel] = 0;
+	while(nMotorEncoder[LFWheel]/627.2<distance/4.0){
+		wait1Msec(10);
+	}
+
+	locX+=cosDegrees(rotation)*distance;
+	locY+=sinDegrees(rotation)*distance;
+	freeze();
+}
+
+void leftTurn (int angle)
+{
+
+	motor[LFWheel] = 127;
+	motor[LRWheel] = 127;
+	motor[RFWheel] = -127;
+	motor[RRWheel] = -127;
+
+	nMotorEncoder[LFWheel] = 0;
+	while(nMotorEncoder[LFWheel]/627.2<(3.125*(angle/360.0))){
+		wait1Msec(10);
+	}
+
+	rotation = (rotation + angle) % 360;
+	freeze();
+}
+
+void rightTurn (int angle)
+{
+
+	motor[LFWheel] = -127;
+	motor[LRWheel] = -127;
+	motor[RFWheel] = 127;
+	motor[RRWheel] = 127;
+
+	nMotorEncoder[LFWheel] = 0;
+	while(abs(nMotorEncoder[LFWheel])/627.2<(3.125*(angle/360.0))){
+		wait1Msec(10);
+	}
+
+	rotation = (rotation - angle) % 360;
+	freeze();
+}
+
+
+
+
 
 void fly(int speedElement)
 {
@@ -94,10 +123,14 @@ void fly(int speedElement)
 	}
 }
 
+
+
+
 void intake(int speed)
 {
 	motor[Feeder] = speed;
 }
+
 
 void rest()//all motors on robot stop
 {
@@ -112,13 +145,13 @@ task main()
 	{
 		if(vexRT(Btn5D))
 		{
-			move(-127);
+			move(-2);
 			wait1Msec(1000);
 			freeze();
 		}
 		else if(vexRT(Btn5U))
 		{
-			move(127);
+			move(2);
 			wait1Msec(1000);
 			freeze();
 		}
@@ -129,7 +162,7 @@ task main()
 		}
 		else if(vexRT(Btn7D))
 		{
-			rightTurn(2100);
+			rightTurn(360);
 			freeze();
 		}
 
