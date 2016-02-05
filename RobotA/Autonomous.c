@@ -37,9 +37,9 @@ int Presets[4] = {0,55, 85,127};
 
 //These variables track the robots position and orientation
 //Useful for any future decisions to veer off track or calculate routes
-double locX;
-double locY;
-double rotation;
+float locX;
+float locY;
+float rotation;
 
 //Distance is in inches
 //Wheels are 4 inches, so one complete rotation moves the bot 4 inches
@@ -65,7 +65,7 @@ void move(int distance)
 	motor[RRWheel] = 127;
 
 	nMotorEncoder[LFWheel] = 0;
-	while(nMotorEncoder[LFWheel]/627.2<distance/4.0){
+	while(nMotorEncoder[LFWheel]/627.2<distance/(4.0*PI)){
 		wait1Msec(10);
 	}
 
@@ -145,39 +145,12 @@ task main()
 	{
 		if(vexRT(Btn5D))
 		{
-			move(-2);
-			wait1Msec(1000);
-			freeze();
-		}
-		else if(vexRT(Btn5U))
-		{
-			move(2);
-			wait1Msec(1000);
-			freeze();
-		}
-		else if(vexRT(Btn7U))
-		{
-			leftTurn(360);
-			freeze();
-		}
-		else if(vexRT(Btn7D))
-		{
-			rightTurn(360);
-			freeze();
-		}
-
-		else if(vexRT(Btn6U))
-		{
-			fly(3);
-			wait1Msec(3000);
-		}
-		else if(vexRT(Btn6D))
-		{
+			leftTurn(45);
+			move(24);
+		  rightTurn(45);
 			intake(127);
-		}
-		else
-		{
-			rest();
+			fly(4);
+			move(24);
 		}
 	}
 }
