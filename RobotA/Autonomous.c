@@ -1,12 +1,13 @@
 #pragma config(I2C_Usage, I2C1, i2cSensors)
-#pragma config(Sensor, I2C_1,  ,               sensorQuadEncoderOnI2CPort,    , AutoAssign)
-#pragma config(Sensor, I2C_2,  ,               sensorQuadEncoderOnI2CPort,    , AutoAssign)
+#pragma config(Sensor, in1,    lineTracker,    sensorLineFollower)
+#pragma config(Sensor, I2C_1,  ,               sensorQuadEncoderOnI2CPort,    , AutoAssign )
+#pragma config(Sensor, I2C_2,  ,               sensorQuadEncoderOnI2CPort,    , AutoAssign )
 #pragma config(Motor,  port1,           LRWheel,       tmotorVex393_HBridge, openLoop, reversed)
 #pragma config(Motor,  port2,           Inside1,       tmotorVex393HighSpeed_MC29, openLoop, encoderPort, I2C_1)
 #pragma config(Motor,  port3,           Inside2,       tmotorVex393HighSpeed_MC29, openLoop, reversed, encoderPort, I2C_2)
 #pragma config(Motor,  port4,           Outside1,      tmotorVex393HighSpeed_MC29, openLoop, reversed)
 #pragma config(Motor,  port5,           Outside2,      tmotorVex393HighSpeed_MC29, openLoop)
-#pragma config(Motor,  port6,           Feeder,        tmotorVex393_MC29, openLoop)
+#pragma config(Motor,  port6,           Feeder,        tmotorVex393_MC29, openLoop, reversed)
 #pragma config(Motor,  port7,           LFWheel,       tmotorVex393_MC29, openLoop, reversed, encoderPort, I2C_1)
 #pragma config(Motor,  port8,           RRWheel,       tmotorVex393_MC29, openLoop)
 #pragma config(Motor,  port9,           RFWheel,       tmotorVex393_MC29, openLoop)
@@ -57,15 +58,22 @@ void freeze()//for the wheels
 
 
 
-void move(int distance)
+void move(int dist)
 {
+	int distance = abs(dist);
+	if(dist>0){
 	motor[LFWheel] = 127;
 	motor[LRWheel] = 127;
 	motor[RFWheel] = 127;
 	motor[RRWheel] = 127;
-
+	}else{
+	motor[LFWheel] = -127;
+	motor[LRWheel] = -127;
+	motor[RFWheel] = -127;
+	motor[RRWheel] = -127;
+	}
 	nMotorEncoder[LFWheel] = 0;
-	while(nMotorEncoder[LFWheel]/627.2<distance/(4.0*PI)){
+	while(abs(nMotorEncoder[LFWheel])/627.2<distance/(4.0*PI)){
 		wait1Msec(10);
 	}
 
@@ -74,7 +82,7 @@ void move(int distance)
 	freeze();
 }
 
-void leftTurn (int angle)
+void rightTurn (int angle)
 {
 
 	motor[LFWheel] = 127;
@@ -91,7 +99,7 @@ void leftTurn (int angle)
 	freeze();
 }
 
-void rightTurn (int angle)
+void leftTurn (int angle)
 {
 
 	motor[LFWheel] = -127;
@@ -124,11 +132,39 @@ void fly(int speedElement)
 }
 
 
+void adjustRight(){
+
+	motor[LFWheel] = 30;
+	motor[LRWheel] = 30;
+	motor[RFWheel] = -30;
+	motor[RRWheel] = -30;
+	while(true){
+		if(SensorValue(lineTracker)<2850){
+		freeze();
+		break;
+		}
+	}
+
+}
+
+void adjustLeft(){
+
+	motor[LFWheel] = -30;
+	motor[LRWheel] = -30;
+	motor[RFWheel] = 30;
+	motor[RRWheel] = 30;
+	while(true){
+		if(SensorValue(lineTracker)<2850){
+		freeze();
+		break;
+		}
+	}
+}
 
 
-void intake(int speed)
+void intake(bool on)
 {
-	motor[Feeder] = speed;
+	motor[Feeder] = (on) ? (127) : (0);
 }
 
 
@@ -136,21 +172,25 @@ void rest()//all motors on robot stop
 {
 	freeze();
 	fly(0);
-	intake(0);
+	intake(false);
 }
 
 task main()
 {
 	while(true)
 	{
-		if(vexRT(Btn5D))
-		{
-			leftTurn(45);
-			move(24);
-		  rightTurn(45);
-			intake(127);
-			fly(4);
-			move(24);
+		if(vexRT(Btn8U)){
+		move(25);
+		leftTurn(45);
+		fly(3);
+		intake(true);
+		move(10);
+		intake(false);
+		move(20);
+		intake(true);
+		adjustRight();
+		wait10Msec(500);
+		rest();
 		}
 	}
 }
