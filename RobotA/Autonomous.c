@@ -182,9 +182,11 @@ task main()
 		if(vexRT(Btn8U)){
 		intake(true);
 		fly(3);
+		/*
 		move(25);
 		leftTurn(10);
-		wait10Msec(1000);
+		*/
+		wait10Msec(450);
 		rest();
 		}
 	}
