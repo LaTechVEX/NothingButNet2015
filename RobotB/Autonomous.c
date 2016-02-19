@@ -157,19 +157,19 @@ task main()
 {
 	while(true)
 	{
-		if(VexRT(Btn5U){
+		if(VexRT(Btn5U)){
 		leftTurn(1);
 		wait10Msec(100);
 		}
-		if(VexRT(Btn6U){
+		if(VexRT(Btn6U)){
 		rightTurn(1);
 		wait10Msec(100);
 		}
-		if(VexRT(Btn8U){
+		if(VexRT(Btn8U)){
 		move(2);
 		wait10Msec(100);
 		}
-		if(VexRT(Btn8D){
+		if(VexRT(Btn8D)){
 		move(-2);
 		wait10Msec(100);
 		}
