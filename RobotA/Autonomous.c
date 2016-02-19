@@ -3,10 +3,10 @@
 #pragma config(Sensor, I2C_1,  ,               sensorQuadEncoderOnI2CPort,    , AutoAssign )
 #pragma config(Sensor, I2C_2,  ,               sensorQuadEncoderOnI2CPort,    , AutoAssign )
 #pragma config(Motor,  port1,           LRWheel,       tmotorVex393_HBridge, openLoop, reversed)
-#pragma config(Motor,  port2,           Inside1,       tmotorVex393HighSpeed_MC29, openLoop, encoderPort, I2C_1)
-#pragma config(Motor,  port3,           Inside2,       tmotorVex393HighSpeed_MC29, openLoop, reversed, encoderPort, I2C_2)
-#pragma config(Motor,  port4,           Outside1,      tmotorVex393HighSpeed_MC29, openLoop, reversed)
-#pragma config(Motor,  port5,           Outside2,      tmotorVex393HighSpeed_MC29, openLoop)
+#pragma config(Motor,  port2,           LFFlywheel,       tmotorVex393HighSpeed_MC29, openLoop, encoderPort, I2C_1)
+#pragma config(Motor,  port3,           RFFlywheel,       tmotorVex393HighSpeed_MC29, openLoop, reversed, encoderPort, I2C_2)
+#pragma config(Motor,  port4,           LRFlywheel,      tmotorVex393HighSpeed_MC29, openLoop, reversed)
+#pragma config(Motor,  port5,           RRFlywheel,      tmotorVex393HighSpeed_MC29, openLoop)
 #pragma config(Motor,  port6,           Feeder,        tmotorVex393_MC29, openLoop, reversed)
 #pragma config(Motor,  port7,           LFWheel,       tmotorVex393_MC29, openLoop, reversed, encoderPort, I2C_1)
 #pragma config(Motor,  port8,           RRWheel,       tmotorVex393_MC29, openLoop)
@@ -124,10 +124,10 @@ void fly(int speedElement)
 {
 	if(!((speedElement < 0) || (speedElement > 4)))
 	{
-		motor[Inside1] = Presets[speedElement];
-		motor[Inside2] = Presets[speedElement];
-		motor[Outside1] = Presets[speedElement];
-		motor[Outside2] = Presets[speedElement];
+		motor[LFFlywheel] = Presets[speedElement];
+		motor[RFFlywheel] = Presets[speedElement];
+		motor[LRFlywheel] = Presets[speedElement];
+		motor[RRFlywheel] = Presets[speedElement];
 	}
 }
 
