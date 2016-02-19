@@ -180,16 +180,11 @@ task main()
 	while(true)
 	{
 		if(vexRT(Btn8U)){
-		move(25);
-		leftTurn(45);
+		intake(true);
 		fly(3);
-		intake(true);
-		move(10);
-		intake(false);
-		move(20);
-		intake(true);
-		adjustRight();
-		wait10Msec(500);
+		move(25);
+		leftTurn(10);
+		wait10Msec(1000);
 		rest();
 		}
 	}

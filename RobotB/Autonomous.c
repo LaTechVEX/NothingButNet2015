@@ -160,14 +160,12 @@ task main()
 	{
 		if(vexRT(Btn8U)){
 		move(25);
-		leftTurn(45);
-		fly(3);
-		intake(true);
+		leftTurn(22.5);
 		move(10);
-		intake(false);
-		move(20);
-		intake(true);
-		wait10Msec(500);
+		leftTurn(22.5);
+		move(10);
+		fly(3);
+		wait10Msec(1000);
 		rest();
 		}
 	}
