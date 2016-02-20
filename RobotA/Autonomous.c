@@ -36,8 +36,8 @@
 
 int Presets[4] = {0,55, 85,127};
 
-//These variables track the robots position and orientation
-//Useful for any future decisions to veer off track or calculate routes
+// These variables track the robots position and orientation
+// Useful for any future decisions to veer off track or calculate routes
 float locX;
 float locY;
 float rotation;
