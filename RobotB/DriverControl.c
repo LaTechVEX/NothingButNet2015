@@ -26,17 +26,17 @@ task main()
 	while(true)
 	{
 		// Flywheel Speed
-	 if(vexRT(Btn8U))
-		currentPreset = 0;
-	 else if (vexRT(Btn8R))
-	  currentPreset = 1;
-	 else if (vexRT(Btn8D))
-	   currentPreset = 2;
-	 else if (vexRT(Btn8L))
-	   currentPreset = 3;
+		if(vexRT(Btn8U))
+			currentPreset = 0;
+		else if (vexRT(Btn8R))
+			currentPreset = 1;
+		else if (vexRT(Btn8D))
+			currentPreset = 2;
+		else if (vexRT(Btn8L))
+			currentPreset = 3;
 
-	  motor[REF] = Presets[currentPreset];
-	  motor[RF] = motor[REF];
+		motor[REF] = Presets[currentPreset];
+		motor[RF] = motor[REF];
 		motor[LF] = motor[RF];
 
 		// Fit the input to an exponential curve
@@ -47,16 +47,16 @@ task main()
 		int verticalR = pow(abs(vexRT(Ch2))/128.0,2.7)*127.0 *((vexRT(Ch2)>0)?(1):(-1));
 
 		// Move Robot
-	  motor[LRW] = verticalL;
-	  motor[LFW] = motor[LRW];
-    motor[RRW] = verticalR;
-    motor[RFW] = motor[RRW];
+		motor[LRW] = verticalL;
+		motor[LFW] = motor[LRW];
+		motor[RRW] = verticalR;
+		motor[RFW] = motor[RRW];
 
-    //Feeder control
-	  if(vexRT(Btn6U))
-	     motor[I1] = 127;
-	  else if(vexRT(Btn5U))
-			 motor[I1] = -127;
+		//Feeder control
+		if(vexRT(Btn6U))
+			motor[I1] = 127;
+		else if(vexRT(Btn5U))
+			motor[I1] = -127;
 		else
 	 	   motor[I1] = 0;
 

@@ -1,9 +1,9 @@
 #pragma config(I2C_Usage, I2C1, i2cSensors)
-#pragma config(Sensor, I2C_1,  ,               sensorQuadEncoderOnI2CPort,    , AutoAssign )
-#pragma config(Motor,  port1,           LFWheel,       tmotorVex393_HBridge, openLoop, encoderPort, I2C_1)
-#pragma config(Motor,  port2,           RFWheel,       tmotorVex393_MC29, openLoop, reversed)
-#pragma config(Motor,  port3,           RRWheel,       tmotorVex393_MC29, openLoop, reversed)
-#pragma config(Motor,  port4,           LRWheel,       tmotorVex393_MC29, openLoop)
+#pragma config(Sensor, I2C_1,  ,               sensorQuadEncoderOnI2CPort,    , AutoAssign)
+#pragma config(Motor,  port1,           LFW,           tmotorVex393_HBridge, openLoop)
+#pragma config(Motor,  port2,           RFW,           tmotorVex393_MC29, openLoop, reversed)
+#pragma config(Motor,  port3,           RRW,           tmotorVex393_MC29, openLoop, reversed)
+#pragma config(Motor,  port4,           LRW,           tmotorVex393_MC29, openLoop)
 #pragma config(Motor,  port5,           REF,           tmotorVex393HighSpeed_MC29, openLoop, encoderPort, I2C_1)
 #pragma config(Motor,  port6,           RF,            tmotorVex393HighSpeed_MC29, openLoop, reversed)
 #pragma config(Motor,  port7,           LF,            tmotorVex393HighSpeed_MC29, openLoop)
@@ -27,10 +27,10 @@ float rotation;
 
 void freeze()//for the wheels
 {
-	motor[LFWheel] = 0;
-	motor[LRWheel] = 0;
-	motor[RFWheel] = 0;
-	motor[RRWheel] = 0;
+	motor[LFW] = 0;
+	motor[LRW] = 0;
+	motor[RFW] = 0;
+	motor[RRW] = 0;
 }
 
 
@@ -39,18 +39,18 @@ void move(int dist)
 {
 	int distance = abs(dist);
 	if(dist>0){
-	motor[LFWheel] = 127;
-	motor[LRWheel] = 127;
-	motor[RFWheel] = 127;
-	motor[RRWheel] = 127;
+	motor[LFW] = 127;
+	motor[LRW] = 127;
+	motor[RFW] = 127;
+	motor[RRW] = 127;
 	}else{
-	motor[LFWheel] = -127;
-	motor[LRWheel] = -127;
-	motor[RFWheel] = -127;
-	motor[RRWheel] = -127;
+	motor[LFW] = -127;
+	motor[LRW] = -127;
+	motor[RFW] = -127;
+	motor[RRW] = -127;
 	}
-	nMotorEncoder[LFWheel] = 0;
-	while(abs(nMotorEncoder[LFWheel])/627.2<distance/(4.0*PI)){
+	nMotorEncoder[LFW] = 0;
+	while(abs(nMotorEncoder[LFW])/627.2<distance/(4.0*PI)){
 		wait1Msec(10);
 	}
 
@@ -62,13 +62,13 @@ void move(int dist)
 void rightTurn (int angle)
 {
 
-	motor[LFWheel] = 127;
-	motor[LRWheel] = 127;
-	motor[RFWheel] = -127;
-	motor[RRWheel] = -127;
+	motor[LFW] = 127;
+	motor[LRW] = 127;
+	motor[RFW] = -127;
+	motor[RRW] = -127;
 
-	nMotorEncoder[LFWheel] = 0;
-	while(nMotorEncoder[LFWheel]/627.2<(3.0*(angle/360.0))){
+	nMotorEncoder[LFW] = 0;
+	while(nMotorEncoder[LFW]/627.2<(3.0*(angle/360.0))){
 		wait1Msec(10);
 	}
 
@@ -79,13 +79,13 @@ void rightTurn (int angle)
 void leftTurn (int angle)
 {
 
-	motor[LFWheel] = -127;
-	motor[LRWheel] = -127;
-	motor[RFWheel] = 127;
-	motor[RRWheel] = 127;
+	motor[LFW] = -127;
+	motor[LRW] = -127;
+	motor[RFW] = 127;
+	motor[RRW] = 127;
 
-	nMotorEncoder[LFWheel] = 0;
-	while(abs(nMotorEncoder[LFWheel])/627.2<(3.0*(angle/360.0))){
+	nMotorEncoder[LFW] = 0;
+	while(abs(nMotorEncoder[LFW])/627.2<(3.0*(angle/360.0))){
 		wait1Msec(10);
 	}
 
@@ -110,10 +110,10 @@ void fly(int speedElement)
 /*
 void adjustRight(){
 
-	motor[LFWheel] = 30;
-	motor[LRWheel] = 30;
-	motor[RFWheel] = -30;
-	motor[RRWheel] = -30;
+	motor[LFW] = 30;
+	motor[LRW] = 30;
+	motor[RFW] = -30;
+	motor[RRW] = -30;
 	while(true){
 		if(SensorValue(lineTracker)<2850){
 		freeze();
@@ -125,10 +125,10 @@ void adjustRight(){
 
 void adjustLeft(){
 
-	motor[LFWheel] = -30;
-	motor[LRWheel] = -30;
-	motor[RFWheel] = 30;
-	motor[RRWheel] = 30;
+	motor[LFW] = -30;
+	motor[LRW] = -30;
+	motor[RFW] = 30;
+	motor[RRW] = 30;
 	while(true){
 		if(SensorValue(lineTracker)<2850){
 		freeze();
