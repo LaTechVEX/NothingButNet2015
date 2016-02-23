@@ -46,6 +46,7 @@ void rest();
 //                       			  Global Variables
 /////////////////////////////////////////////////////////////////////////////////////////
 
+// **** PLEASE DO NOT TOUCH THIS SECTION ****
 float pid_Kp = 0.506;
 float pid_Ki = 0.424;
 float pid_Kd = 0.04;
@@ -53,6 +54,7 @@ static int pidRunning = 1;
 static float pidRequestedValue;
 //int Presets[4] = {0, 142, 155, 180};
 int Presets[4] = {0, 125, 136, 160};
+// **** PLEASE DO NOT TOUCH THIS SECTION ****
 
 // These variables track the robots position and orientation
 // Useful for any future decisions to veer off track or calculate routes
