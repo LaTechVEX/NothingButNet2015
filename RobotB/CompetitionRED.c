@@ -129,8 +129,9 @@ task autonomous()
 task usercontrol()
 {
 	// Set the motors initially
+	pidRunning = 1;
 	int currentPreset = 0;
-	fly(0);
+	fly(currentPreset);
 	startTask(pidControl);
 
 	while(true)
@@ -261,16 +262,12 @@ void fly(int speedElement)
 {
 	if(!((speedElement < 0) || (speedElement > 4)))
 	{
+		pidRequestedValue = Presets[speedElement];
+		
 		if(speedElement != 0)
-		{
-			pidRequestedValue = Presets[speedElement];
 			pidRunning = 1;
-		}
 		else
-		{
-			pidRequestedValue = Presets[speedElement];
 			pidRunning = 0;
-		}
 	}
 }
 
@@ -308,7 +305,7 @@ void intake(bool on)
 
 task pidControl()
 {
-		float  pidSensorCurrentValue;
+	float  pidSensorCurrentValue;
     float  pidError;
     float  pidLastError;
     float  pidIntegral;
@@ -359,7 +356,7 @@ task pidControl()
 			if( pidDrive < PID_DRIVE_MIN )
 				pidDrive = PID_DRIVE_MIN;
 
-			// send to motor
+			// Send to motor
 			motor[ PID_MOTOR_INDEX ] = pidDrive * PID_MOTOR_SCALE;
 			motor[RF] = motor[PID_MOTOR_INDEX];
 			motor[LF] = motor[PID_MOTOR_INDEX];
@@ -369,12 +366,16 @@ task pidControl()
 		}
 		else
 		{
-			// clear all
+			// Clear All
 			pidError      = 0;
 			pidLastError  = 0;
 			pidIntegral   = 0;
 			pidDerivative = 0;
+			
+			// Stop Flywheel
 			motor[ PID_MOTOR_INDEX ] = 0;
+			motor[RF] = motor[PID_MOTOR_INDEX];
+			motor[LF] = motor[PID_MOTOR_INDEX];
 		}
    }
 }

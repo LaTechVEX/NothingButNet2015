@@ -104,8 +104,9 @@ task autonomous()
 task usercontrol()
 {
 	// Set the motors initially
+	pidRunning = 1;
 	int currentPreset = 0;
-	fly(0);
+	fly(currentPreset);
 	startTask(pidControl);
 
 	while(true)
@@ -228,6 +229,11 @@ void fly(int speedElement)
 	if(!((speedElement < 0) || (speedElement > 4)))
 	{
 		pidRequestedValue = Presets[speedElement];
+		
+		if(speedElement != 0)
+			pidRunning = 1;
+		else
+			pidRunning = 0;
 	}
 }
 
@@ -332,6 +338,9 @@ task pidControl()
 			pidIntegral   = 0;
 			pidDerivative = 0;
 			motor[ PID_MOTOR_INDEX ] = 0;
+			motor[RFFlywheel] = motor[PID_MOTOR_INDEX];
+			motor[RRFlywheel] = motor[PID_MOTOR_INDEX];
+			motor[LRFlywheel] = motor[PID_MOTOR_INDEX];
 		}
    }
 }
