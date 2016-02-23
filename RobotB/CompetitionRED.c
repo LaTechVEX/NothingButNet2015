@@ -45,12 +45,12 @@ void rest();
 //                       			  Global Variables
 /////////////////////////////////////////////////////////////////////////////////////////
 
-float pid_Kp = 0.1;
-float pid_Kd = 0.1;
-float pid_Ki = 0.03;
+float pid_Kp = 0.469;
+float pid_Ki = 0.382;
+float pid_Kd = 0.038;
 static int pidRunning = 1;
 static float pidRequestedValue;
-int Presets[4] = {0, 5, 10, 15};
+int Presets[4] = {0, 118, 148, 200};
 
 // These variables track the robots position and orientation
 // Useful for any future decisions to veer off track or calculate routes
@@ -76,12 +76,12 @@ void pre_auton()
 task autonomous()
 {
 	while(true)
-	{
+	{/*
 		// Set the motors initially
 		int currentPreset = 0;
 		fly(0);
 		startTask(pidControl);
-		
+
 		if(vexRT(Btn5U))
 		{
 			leftTurn(1);
@@ -118,7 +118,7 @@ task autonomous()
 			fly(3);
 			wait10Msec(1000);
 			rest();
-		}
+		}*/
 	}
 }
 
@@ -144,7 +144,7 @@ task usercontrol()
 			currentPreset = 2;
 		else if (vexRT(Btn8L))
 			currentPreset = 3;
-		
+
 		// Set the flywheel speed
 		fly(currentPreset);
 
@@ -261,7 +261,16 @@ void fly(int speedElement)
 {
 	if(!((speedElement < 0) || (speedElement > 4)))
 	{
-		pidRequestedValue = Presets[speedElement];
+		if(speedElement != 0)
+		{
+			pidRequestedValue = Presets[speedElement];
+			pidRunning = 1;
+		}
+		else
+		{
+			pidRequestedValue = Presets[speedElement];
+			pidRunning = 0;
+		}
 	}
 }
 
@@ -299,7 +308,7 @@ void intake(bool on)
 
 task pidControl()
 {
-	float  pidSensorCurrentValue;
+		float  pidSensorCurrentValue;
     float  pidError;
     float  pidLastError;
     float  pidIntegral;

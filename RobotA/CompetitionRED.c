@@ -46,12 +46,13 @@ void rest();
 //                       			  Global Variables
 /////////////////////////////////////////////////////////////////////////////////////////
 
-float pid_Kp = 0.1;
-float pid_Kd = 0.1;
-float pid_Ki = 0.03;
+float pid_Kp = 0.506;
+float pid_Ki = 0.424;
+float pid_Kd = 0.04;
 static int pidRunning = 1;
 static float pidRequestedValue;
-int Presets[4] = {0, 5, 10, 15};
+//int Presets[4] = {0, 142, 155, 180};
+int Presets[4] = {0, 125, 136, 160};
 
 // These variables track the robots position and orientation
 // Useful for any future decisions to veer off track or calculate routes
@@ -82,7 +83,7 @@ task autonomous()
 		int currentPreset = 0;
 		fly(0);
 		startTask(pidControl);
-	
+
 		if(vexRT(Btn8U)){
 		intake(true);
 		fly(3);
