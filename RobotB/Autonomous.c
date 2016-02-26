@@ -1,4 +1,6 @@
 #pragma config(I2C_Usage, I2C1, i2cSensors)
+#pragma config(Sensor, in1,    lineTrackerR,   sensorLineFollower)
+#pragma config(Sensor, in2,    lineTrackerL,   sensorLineFollower)
 #pragma config(Sensor, I2C_1,  ,               sensorQuadEncoderOnI2CPort,    , AutoAssign )
 #pragma config(Motor,  port1,           LFWheel,       tmotorVex393_HBridge, openLoop, encoderPort, I2C_1)
 #pragma config(Motor,  port2,           RFWheel,       tmotorVex393_MC29, openLoop, reversed)
@@ -122,21 +124,29 @@ void adjustRight(){
 	}
 
 }
+*/
+void adjustToPath(){
 
-void adjustLeft(){
-
-	motor[LFWheel] = -30;
-	motor[LRWheel] = -30;
-	motor[RFWheel] = 30;
-	motor[RRWheel] = 30;
-	while(true){
-		if(SensorValue(lineTracker)<2850){
-		freeze();
-		break;
+	motor[LFWheel] = 20;
+	motor[LRWheel] = 20;
+	motor[RFWheel] = 20;
+	motor[RRWheel] = 20;
+	bool leftOn=true;
+	bool rightOn=true;
+	while(leftOn||rightOn){
+		if(SensorValue(lineTrackerL)<3000){
+			motor[LFWheel] = 0;
+			motor[LRWheel] = 0;
+			leftOn=false;
+		}
+		if(SensorValue(lineTrackerR)<3000){
+			motor[RFWheel] = 0;
+			motor[RRWheel] = 0;
+			rightOn=false;
 		}
 	}
 }
-*/
+
 
 
 void intake(bool on)
@@ -157,35 +167,44 @@ task main()
 {
 	while(true)
 	{
-		if(VexRT(Btn5U)){
+		if(vexRT(Btn5U)){
 		leftTurn(1);
 		wait10Msec(100);
 		}
-		if(VexRT(Btn6U)){
+		if(vexRT(Btn6U)){
 		rightTurn(1);
 		wait10Msec(100);
 		}
-		if(VexRT(Btn8U)){
-		move(2);
+		if(vexRT(Btn8U)){
+		move(10);
 		wait10Msec(100);
 		}
-		if(VexRT(Btn8D)){
-		move(-2);
+		if(vexRT(Btn8D)){
+		move(-10);
 		wait10Msec(100);
 		}
 
-		if(VexRT(Btn7U)){
+		if(vexRT(Btn7U)){
 		rightTurn(360);
+		}
+		if(vexRT(Btn7D)){
+		intake(true);
+		fly(3);
 		}
 
 
 		if(vexRT(Btn8R)){
-		rightTurn(2);
-		move(20);
-		leftTurn(10);
-		move(30);
-		intake(true);
+		rightTurn(6.9);
+		move(25);
+		adjustToPath();
+		wait10Msec(500);
 		fly(3);
+		wait10Msec(200);
+		intake(true);
+		wait10Msec(100);
+		intake(false);
+		wait10Msec(100);
+		intake(true);
 		wait10Msec(1000);
 		rest();
 		}
