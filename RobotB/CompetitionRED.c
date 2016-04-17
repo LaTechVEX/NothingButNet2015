@@ -17,20 +17,10 @@
 #pragma userControlDuration(115)
 #include "Vex_Competition_Includes.c"
 
-// PID Control Definitions
-#define PID_SENSOR_INDEX     I2C_1
-#define PID_SENSOR_SCALE     (1)
-#define PID_MOTOR_INDEX      REF
-#define PID_MOTOR_SCALE      (-1)
-#define PID_DRIVE_MAX        127
-#define PID_DRIVE_MIN        0
-#define PID_INTEGRAL_LIMIT   50
-
 /////////////////////////////////////////////////////////////////////////////////////////
 //                       				 Function Stubs
 /////////////////////////////////////////////////////////////////////////////////////////
 
-task pidControl();
 void freeze();
 void move(int dist);
 void rightTurn(int angle);
@@ -47,7 +37,7 @@ void flyspeed(int speed);
 /////////////////////////////////////////////////////////////////////////////////////////
 
 // **** PLEASE DO NOT TOUCH THIS SECTION ****
-int Presets[4] = {0, 900, 1200, 1400};
+int Presets[4] = {0, 54, 69, 77};
 // **** PLEASE DO NOT TOUCH THIS SECTION ****
 
 // These variables track the robots position and orientation
@@ -57,9 +47,6 @@ float locY;
 float rotation;
 int currentPreset = 0;
 static float drivespeed = 0;
-int test;
-int error;
-static float multiplier;
 
 /////////////////////////////////////////////////////////////////////////////////////////
 //                          Pre-Autonomous Functions
@@ -133,9 +120,8 @@ task autonomous()
 task usercontrol()
 {
 	// Set the motors initially
-	currentPreset = 2;
+	currentPreset = 0;
 	fly(currentPreset);
-	startTask(pidControl);
 
 	while(true)
 	{
@@ -268,10 +254,14 @@ void fly(int speedElement)
 		if(speedElement == 0)
 			drivespeed = 0;
 		else
-			drivespeed = 20;
+			drivespeed = Presets[speedElement];
 	}
 	else
 		drivespeed = 0;
+
+	motor[REF] = drivespeed;
+	motor[RF] = motor[REF];
+	motor[LF] = motor[REF];
 }
 
 void adjustRight()
@@ -304,32 +294,4 @@ void intake(bool on)
 {
 	motor[I1] = (on) ? (127) : (0);
 	motor[I2] = motor[I1];
-}
-
-void flyspeed(float speed)
-{
-	motor[ PID_MOTOR_INDEX ] = (int)speed;
-	motor[RF] = motor[PID_MOTOR_INDEX];
-	motor[LF] = motor[PID_MOTOR_INDEX];
-}
-
-task pidControl()
-{
-	while(true)
-	{
-		test = SensorValue[PID_SENSOR_INDEX];
-		error = Presets[currentPreset] - SensorValue[PID_SENSOR_INDEX];
-		if(error >= 0)
-		{
-			float newspeed = drivespeed * 1.5;
-			multiplier = drivespeed*1.5;
-			drivespeed = multiplier;
-		}
-		else
-			drivespeed = drivespeed;
-	  flyspeed(drivespeed);
-		SensorValue[PID_SENSOR_INDEX] = 0;
-		//multiplier = 0;
-		delay(1000);
-	}
 }

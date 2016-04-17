@@ -18,20 +18,10 @@
 #pragma userControlDuration(115)
 #include "Vex_Competition_Includes.c"
 
-// PID Control Definitions
-#define PID_SENSOR_INDEX     I2C_1
-#define PID_SENSOR_SCALE     1
-#define PID_MOTOR_INDEX      LFFlywheel
-#define PID_MOTOR_SCALE      (-1)
-#define PID_DRIVE_MAX        127
-#define PID_DRIVE_MIN        (-127)
-#define PID_INTEGRAL_LIMIT   50
-
 /////////////////////////////////////////////////////////////////////////////////////////
 //                       				 Function Stubs
 /////////////////////////////////////////////////////////////////////////////////////////
 
-task pidControl();
 void freeze();
 void move(int dist);
 void rightTurn(int angle);
@@ -46,15 +36,7 @@ void rest();
 //                       			  Global Variables
 /////////////////////////////////////////////////////////////////////////////////////////
 
-// **** PLEASE DO NOT TOUCH THIS SECTION ****
-float pid_Kp = 0.506;
-float pid_Ki = 0.424;
-float pid_Kd = 0.04;
-static int pidRunning = 1;
-static float pidRequestedValue;
-//int Presets[4] = {0, 142, 155, 180};
-int Presets[4] = {0, 125, 136, 160};
-// **** PLEASE DO NOT TOUCH THIS SECTION ****
+int Presets[4] = {0, 51, 62, 72};
 
 // These variables track the robots position and orientation
 // Useful for any future decisions to veer off track or calculate routes
@@ -84,7 +66,6 @@ task autonomous()
 		// Set the motors initially
 		int currentPreset = 0;
 		fly(0);
-		startTask(pidControl);
 
 		if(vexRT(Btn8U)){
 		intake(true);
@@ -106,10 +87,9 @@ task autonomous()
 task usercontrol()
 {
 	// Set the motors initially
-	pidRunning = 1;
 	int currentPreset = 0;
 	fly(currentPreset);
-	startTask(pidControl);
+
 
 	while(true)
 	{
@@ -228,15 +208,15 @@ void leftTurn (int angle)
 
 void fly(int speedElement)
 {
+	int sp = 0;
 	if(!((speedElement < 0) || (speedElement > 4)))
 	{
-		pidRequestedValue = Presets[speedElement];
-		
-		if(speedElement != 0)
-			pidRunning = 1;
-		else
-			pidRunning = 0;
+		sp = Presets[speedElement];
 	}
+	motor[LFFlywheel] = sp;
+	motor[RFFlywheel] = motor[LFFlywheel];
+	motor[RRFlywheel] = motor[LFFlywheel];
+	motor[LRFlywheel] = motor[LFFlywheel];
 }
 
 void adjustRight()
@@ -268,81 +248,4 @@ void adjustLeft()
 void intake(bool on)
 {
 	motor[Feeder] = (on) ? (127) : (0);
-}
-
-task pidControl()
-{
-	float  pidSensorCurrentValue;
-    float  pidError;
-    float  pidLastError;
-    float  pidIntegral;
-    float  pidDerivative;
-    float  pidDrive;
-
-    // If we are using an encoder then clear it
-    if( SensorType[ PID_SENSOR_INDEX ] == sensorQuadEncoderOnI2CPort )
-        SensorValue[ PID_SENSOR_INDEX ] = 0;
-
-    // Init the variables
-    pidLastError  = 0;
-    pidIntegral   = 0;
-
-    while( true )
-    {
-		// Is PID control active ?
-		if( pidRunning )
-		{
-			// Read the sensor value and scale
-			pidSensorCurrentValue = SensorValue[ PID_SENSOR_INDEX ] * PID_SENSOR_SCALE;
-
-			// calculate error
-			pidError = pidSensorCurrentValue - pidRequestedValue;
-
-			// integral - if Ki is not 0
-			if( pid_Ki != 0 )
-			{
-				// If we are inside controllable window then integrate the error
-				if( abs(pidError) < PID_INTEGRAL_LIMIT )
-					pidIntegral = pidIntegral + pidError;
-				else
-					pidIntegral = 0;
-			}
-			else
-				pidIntegral = 0;
-
-			// calculate the derivative
-			pidDerivative = pidError - pidLastError;
-			pidLastError  = pidError;
-
-			// calculate drive
-			pidDrive = (pid_Kp * pidError) + (pid_Ki * pidIntegral) + (pid_Kd * pidDerivative);
-
-			// limit drive
-			if( pidDrive > PID_DRIVE_MAX )
-				pidDrive = PID_DRIVE_MAX;
-			if( pidDrive < PID_DRIVE_MIN )
-				pidDrive = PID_DRIVE_MIN;
-
-			// send to motor
-			motor[ PID_MOTOR_INDEX ] = pidDrive * PID_MOTOR_SCALE;
-			motor[RFFlywheel] = motor[PID_MOTOR_INDEX];
-			motor[RRFlywheel] = motor[PID_MOTOR_INDEX];
-			motor[LRFlywheel] = motor[PID_MOTOR_INDEX];
-			writeDebugStreamLine("pidDrive = %d", pidDrive);
-			writeDebugStreamLine("pidSensorCurrentValue = %d", pidSensorCurrentValue);
-			EndTimeSlice();
-		}
-		else
-		{
-			// clear all
-			pidError      = 0;
-			pidLastError  = 0;
-			pidIntegral   = 0;
-			pidDerivative = 0;
-			motor[ PID_MOTOR_INDEX ] = 0;
-			motor[RFFlywheel] = motor[PID_MOTOR_INDEX];
-			motor[RRFlywheel] = motor[PID_MOTOR_INDEX];
-			motor[LRFlywheel] = motor[PID_MOTOR_INDEX];
-		}
-   }
 }
